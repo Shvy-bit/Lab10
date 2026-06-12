@@ -28,7 +28,7 @@ button {
     border-radius: 8px;
 }
 .main {
-    background-image: url('../public/fondo-main.jpg');  
+    /* background-image: url('');*/
     background-repeat:no-repeat;
     background-position: center;
     background-size: cover;
