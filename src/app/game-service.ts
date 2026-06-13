@@ -27,12 +27,22 @@ export class GameService {
     },
     {
         name: 'Países',
-        words: ['Argentina', 'España', 'México', 'Japón'],
+        words: ['argentina', 'mexico', 'japon'],
         difficulty: 1
     }
     ];
+    public getCategories(): Category[] { return this.categories; }
 
-    public getCategory() { return this.categories; }
-    
-    
+    private randomCategory(): Category {
+        const index = Math.floor(Math.random() * this.categories.length);
+        return this.categories[index];
+    }
+    private category = this.randomCategory();
+    public setCategory(category: Category) { this.category = category; }
+    public getCategory(): Category { return this.category; }
+
+    public getWord(category: Category): string {
+        const index = Math.floor(Math.random() * category.words.length);
+        return category.words[index];
+    }
 }

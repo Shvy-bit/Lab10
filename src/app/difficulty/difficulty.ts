@@ -11,17 +11,9 @@ import { RouterLink } from "@angular/router";
 export class Difficulty {
   private gameService = inject(GameService);
 
-  public categories = this.gameService.getCategory();
-
-  private randomCategory(): Category {
-    const index = Math.floor(Math.random() * this.categories.length);
-    return this.categories[index];
-  }
-  private category: Category = this.randomCategory();
+  public categories = this.gameService.getCategories();
 
   public setCategory(category: Category) {
-    this.category = category;
+    this.gameService.setCategory(category);
   }
-
-  
 }

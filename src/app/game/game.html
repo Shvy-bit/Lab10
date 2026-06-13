@@ -1,1 +1,37 @@
-<p>game works!</p>
+<div class="card main">
+    <div class="center game-category">
+        <h2>{{category.name}}</h2>
+        <span>Dificultad: {{category.difficulty}}</span>
+    </div>
+    <div class="center">
+        @for(char of wordEncrypt(); track char) {
+            <span>&nbsp;</span>
+            <span>{{char}}</span>
+            <span>&nbsp;</span>
+        }
+    </div>
+    <div class="center">
+        <img [src]="dibujoUrl()" alt="Dibujo Ahorcado">
+    </div>
+    <div class="center">
+        <p>{{message()}}</p>
+    </div>
+    <div class="center">
+        <input
+        class="input"
+        #input
+        [disabled]="gameOver()"
+        (keyup)="readKey($event, input)"
+        >
+    </div>
+    <div class="center">
+        @if (gameOver()) {
+            @if (isFill()) {
+            <button routerLink="">Felicidades</button>
+        }
+        @else {
+            <button routerLink="">Perdiste</button>
+        }
+        }
+    </div>
+</div>
