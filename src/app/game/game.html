@@ -26,12 +26,9 @@
     </div>
     <div class="center">
         @if (gameOver()) {
-            @if (isFill()) {
-            <button routerLink="">Felicidades</button>
-        }
-        @else {
-            <button routerLink="">Perdiste</button>
-        }
+            <button routerLink="" (click)="saveGame()">
+                @if (isFill()) { Felicidades } @else { Perdiste }
+            </button>
         }
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Service } from '@angular/core';
+import { Service, signal } from '@angular/core';
 
 export interface Category {
     name: string;
@@ -31,13 +31,15 @@ export class GameService {
         difficulty: 1
     }
     ];
+    private gamesMatches: GameMatch[] = [];
+
     public getCategories(): Category[] { return this.categories; }
 
     private randomCategory(): Category {
         const index = Math.floor(Math.random() * this.categories.length);
         return this.categories[index];
     }
-    private category = this.randomCategory();
+    private category: Category = this.randomCategory();
     public setCategory(category: Category) { this.category = category; }
     public getCategory(): Category { return this.category; }
 
@@ -45,4 +47,17 @@ export class GameService {
         const index = Math.floor(Math.random() * category.words.length);
         return category.words[index];
     }
+
+    public saveGame(category: Category, word: string, won: boolean) {
+        const newMatch: GameMatch =
+        {
+            id: this.gamesMatches.length + 1,
+            category: category,
+            word: word,
+            score: 1000,
+            won: won,
+        };
+        this.gamesMatches.push(newMatch);
+    }
+    public getGamesMatches(): GameMatch[] { return this.gamesMatches; }
 }

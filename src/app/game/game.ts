@@ -70,4 +70,7 @@ export class Game {
       this.attempt.update(curr => curr + 1)
     }
   }
+  public saveGame() {
+    this.gameService.saveGame(this.category, this.word, this.isFill());
+  }
 }
