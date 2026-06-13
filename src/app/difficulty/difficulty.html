@@ -3,8 +3,17 @@
         <h2>Seleccione una categoria</h2>
     </div>
     <div class="center category">
-        @for () {
-            <button></button>
+        @for (category of categories; track category) {
+            <div class="card category-card" (click)="setCategory(category)" routerLink="">
+                <span>{{category.name}}</span>
+                <span>&nbsp;</span>
+                <span>{{category.difficulty}}</span>
+            </div>
+        }
+        @empty {
+            <div class="center">
+                <p>No hay categorias</p>
+            </div>
         }
     </div>
 </div>
