@@ -3,12 +3,14 @@ import { computed, Service, Signal, signal } from '@angular/core';
 export interface Category {
     name: string;
     words: string[];
-    difficulty: number;
 }
 export interface GameMatch {
     id: number;
     category: Category;
     word: string;
+    wordEncrypt :string[];
+    image: string;
+    time: number;
     score: number;
     won: boolean;
 }
@@ -18,25 +20,22 @@ export class GameService {
     {
         name: 'Animales',
         words: ['perro', 'gato', 'elefante', 'jirafa'],
-        difficulty: 1
     },
     {
         name: 'Tecnología',
         words: ['computadora', 'teclado', 'software', 'angular'],
-        difficulty: 2
     },
     {
         name: 'Países',
         words: ['argentina', 'mexico', 'japon'],
-        difficulty: 1
     }
     ];
     private gamesMatches: GameMatch[] = [];
     
-    private category = signal<Category>(this.categories[Math.floor(Math.random() * this.categories.length)]);
     private attempt = signal(0);
-    
+    public category = signal<Category>(this.categories[Math.floor(Math.random() * this.categories.length)]);
     public lettersInput = signal<string[]>([]);
+    
     public word = computed<string>(() => this.category().words[Math.floor(Math.random() * this.category().words.length)]);
     public wordEncrypt = computed<string[]>(() => this.word().split('').map(
         letter => this.lettersInput().includes(letter) ? letter : '_'
@@ -59,6 +58,9 @@ export class GameService {
             id: this.gamesMatches.length + 1,
             category: this.category(),
             word: this.word(),
+            wordEncrypt: this.wordEncrypt(),
+            image: this.dibujoUrl(),
+            time: 1.54,
             score: 1000,
             won: this.isFill(),
         };
@@ -70,4 +72,5 @@ export class GameService {
         this.attempt.set(0);
         this.lettersInput.set([])
     }
+
 }

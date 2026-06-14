@@ -11,7 +11,6 @@ import { RouterLink } from '@angular/router';
 export class Game {
   public gameService = inject(GameService);
 
-  public category: Category = this.gameService.getCategory();
   private word: string = this.gameService.getWord();
 
   public message = signal<string>("Ingresa una letra");

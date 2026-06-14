@@ -1,7 +1,6 @@
 <div class="card main">
     <div class="center game-category">
-        <h2>{{category.name}}</h2>
-        <span>Dificultad: {{category.difficulty}}</span>
+        <h2>{{gameService.category().name}}</h2>
     </div>
     <div class="center">
         @for(char of gameService.wordEncrypt(); track char) {
@@ -11,7 +10,7 @@
         }
     </div>
     <div class="center">
-        <img [src]="gameService.dibujoUrl()" alt="Dibujo Ahorcado">
+        <img [src]="gameService.dibujoUrl()" alt="Dibujo Ahorcado" >
     </div>
     <div class="center">
         <p>{{message()}}</p>

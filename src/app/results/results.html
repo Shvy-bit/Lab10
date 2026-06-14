@@ -1,16 +1,26 @@
 <div class="card main">
-    @for (gameMatch of gamesMatches; track gameMatch) {
-        <p>{{gameMatch.id}}</p>
-        <p>{{gameMatch.category.name}}</p>
-        <p>{{gameMatch.category.difficulty}}</p>
-        <p>{{gameMatch.word}}</p>
-        @if (gameMatch.won) {
-            <p>Ganaste</p>
+    <div class="results">
+        @for (gameMatch of gamesMatches; track gameMatch) {
+            <div class="card games-matches">
+                <div class="games-header">
+                    <p>#{{gameMatch.id}}</p>
+                    <p>{{gameMatch.category.name}}</p>
+                </div>
+                <div class="game-content">
+                    <p>{{gameMatch.word}}</p>
+                    @for(char of gameMatch.wordEncrypt; track char) {
+                        <span>&nbsp;</span>
+                        <span>{{char}}</span>
+                        <span>&nbsp;</span>
+                    }
+                    <img [src]=gameMatch.image alt="image game">
+                    <div>
+                        <p>Tiempo: {{gameMatch.time}}</p>
+                        <p>Puntaje: {{gameMatch.score}}</p>
+                    </div>
+                </div>
+            </div>
         }
-        @else {
-            <p>Perdiste</p>
-        }
-
-    }
+    </div>
     <button routerLink=""> Otra</button>
 </div>
