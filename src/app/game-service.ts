@@ -1,4 +1,4 @@
-import { computed, Service, Signal, signal } from '@angular/core';
+import { computed, Service, signal } from '@angular/core';
 
 export interface Category {
     name: string;
@@ -10,7 +10,6 @@ export interface GameMatch {
     word: string;
     wordEncrypt :string[];
     image: string;
-    time: number;
     score: number;
     won: boolean;
 }
@@ -58,7 +57,6 @@ export class GameService {
             word: this.word(),
             wordEncrypt: this.wordEncrypt(),
             image: this.dibujoUrl(),
-            time: 1.54,
             score: this.score(),
             won: this.isFill(),
         };
