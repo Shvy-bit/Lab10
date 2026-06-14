@@ -68,7 +68,8 @@ export class GameService {
     public reset(): void {
         this.category.set(this.categories[Math.floor(Math.random() * this.categories.length)]);
         this.attempt.set(0);
-        this.lettersInput.set([])
+        this.lettersInput.set([]);
+        this.score.set(1000);
     }
 
     public score = signal<number>(1000);
