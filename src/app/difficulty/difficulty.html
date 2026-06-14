@@ -4,7 +4,7 @@
     </div>
     <div class="center category">
         @for (category of categories; track category) {
-            <div class="card category-card" (click)="setCategory(category)" routerLink="/game/">
+            <div class="card category-card" (click)="gameService.setCategory(category)" routerLink="/game/">
                 <span>{{category.name}}</span>
                 <span>&nbsp;</span>
                 <span>{{category.difficulty}}</span>

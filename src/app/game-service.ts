@@ -1,4 +1,4 @@
-import { Service, signal } from '@angular/core';
+import { computed, Service, Signal, signal } from '@angular/core';
 
 export interface Category {
     name: string;
@@ -14,7 +14,7 @@ export interface GameMatch {
 }
 @Service()
 export class GameService {
-    private categories: Category[] = [
+    private readonly categories: Category[] = [
     {
         name: 'Animales',
         words: ['perro', 'gato', 'elefante', 'jirafa'],
@@ -32,32 +32,42 @@ export class GameService {
     }
     ];
     private gamesMatches: GameMatch[] = [];
-
+    
+    private category = signal<Category>(this.categories[Math.floor(Math.random() * this.categories.length)]);
+    private attempt = signal(0);
+    
+    public lettersInput = signal<string[]>([]);
+    public word = computed<string>(() => this.category().words[Math.floor(Math.random() * this.category().words.length)]);
+    public wordEncrypt = computed<string[]>(() => this.word().split('').map(
+        letter => this.lettersInput().includes(letter) ? letter : '_'
+    ));
+    public dibujoUrl = computed<string>(() => "attempts/att0" + this.attempt() + ".png")
+    public isFill = computed<boolean>(() => this.word() === this.wordEncrypt().join(''));
+    public gameOver = computed<boolean>(() => this.attempt() > 5 || this.isFill());
+    
+    public setCategory(category: Category): void { this.category.set(category); }
+    
     public getCategories(): Category[] { return this.categories; }
+    public getGamesMatches(): GameMatch[] { return this.gamesMatches; }
+    public getCategory(): Category { return this.category(); }
+    public getWord(): string { return this.word(); }
+    public addAtempt(): void { this.attempt.update(curr => curr + 1); }
 
-    private randomCategory(): Category {
-        const index = Math.floor(Math.random() * this.categories.length);
-        return this.categories[index];
-    }
-    private category: Category = this.randomCategory();
-    public setCategory(category: Category) { this.category = category; }
-    public getCategory(): Category { return this.category; }
-
-    public getWord(category: Category): string {
-        const index = Math.floor(Math.random() * category.words.length);
-        return category.words[index];
-    }
-
-    public saveGame(category: Category, word: string, won: boolean) {
+    public saveGame() {
         const newMatch: GameMatch =
         {
             id: this.gamesMatches.length + 1,
-            category: category,
-            word: word,
+            category: this.category(),
+            word: this.word(),
             score: 1000,
-            won: won,
+            won: this.isFill(),
         };
         this.gamesMatches.push(newMatch);
+        this.reset();
     }
-    public getGamesMatches(): GameMatch[] { return this.gamesMatches; }
+    public reset(): void {
+        this.category.set(this.categories[Math.floor(Math.random() * this.categories.length)]);
+        this.attempt.set(0);
+        this.lettersInput.set([])
+    }
 }

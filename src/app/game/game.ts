@@ -9,68 +9,33 @@ import { RouterLink } from '@angular/router';
   styleUrl: './game.css',
 })
 export class Game {
-  private gameService = inject(GameService);
+  public gameService = inject(GameService);
 
   public category: Category = this.gameService.getCategory();
-  private word: string = this.gameService.getWord(this.category);
-  public wordEncrypt = signal<string[]>(new Array(this.word.length).fill('_'));
-
-  private attempt = signal<number>(0);
-  public dibujoUrl = computed<string>(() => "attempts/att0" + this.attempt() + ".png");
+  private word: string = this.gameService.getWord();
 
   public message = signal<string>("Ingresa una letra");
-
-  public isFill = computed<boolean>(() => this.word === this.wordEncrypt().join(''));
-  public gameOver = computed<boolean>(() => this.attempt() > 5 || this.isFill());
 
   public readKey(event: KeyboardEvent, input: HTMLInputElement){
     const charInput: string = event.key;
     const isLetter: boolean = /^[a-zA-ZñÑ]$/.test(charInput);
 
-    if (!isLetter) {
+    if (!isLetter)
       this.message.set("'" + charInput + "' no es una letra");
-    }
-
     else {
-      if(!this.isNew(charInput)) this.message.set("'"+ charInput + "' ya fue ingresado");
-      else this.Decrypt(charInput);
-    }
-
-    input.value = "";
-  }
-
-  private isNew(charInput: string): boolean {
-    let isNew = true;
-    const word = this.wordEncrypt();
-    for (const char of word) {
-      if (charInput === char) isNew = false;
-    }
-    return isNew;
-  }
-
-  private Decrypt(char: string) {
-    const wordSplit = this.word.split('');
-    let attemptValid = false;
-
-    this.wordEncrypt.update(curr => {
-      const out = [...curr]; 
-      
-      for (let i = 0; i < wordSplit.length; i++) {
-        if (wordSplit[i] === char) {
-          out[i] = char;
-          attemptValid = true;
+      if (this.gameService.lettersInput().includes(charInput))
+        this.message.set("Ya probaste '" + charInput + "'");
+      else {
+        if (this.gameService.word().split('').includes(charInput))
+          this.message.set("Felicidades '" + charInput + "' es una letra");
+        else {
+          this.message.set("'" + charInput + "' no esta en la palabra");
+          this.gameService.addAtempt();  
         }
       }
-      return out;
-    });
-    
-    if (attemptValid) this.message.set("Felicidades '" + char + "' es una letra");
-    else {
-      this.message.set("'" + char + "' no esta en la palabra");
-      this.attempt.update(curr => curr + 1)
+      this.gameService.lettersInput.update(curr => [...curr, charInput])
     }
-  }
-  public saveGame() {
-    this.gameService.saveGame(this.category, this.word, this.isFill());
+    
+    input.value = "";
   }
 }

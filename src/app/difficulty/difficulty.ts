@@ -9,11 +9,6 @@ import { RouterLink } from "@angular/router";
   styleUrl: './difficulty.css',
 })
 export class Difficulty {
-  private gameService = inject(GameService);
-
+  public gameService = inject(GameService);
   public categories = this.gameService.getCategories();
-
-  public setCategory(category: Category) {
-    this.gameService.setCategory(category);
-  }
 }
