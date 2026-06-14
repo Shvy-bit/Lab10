@@ -11,25 +11,30 @@ import { RouterLink } from '@angular/router';
 export class Game {
   public gameService = inject(GameService);
 
-  private word: string = this.gameService.getWord();
-
-  public message = signal<string>("Ingresa una letra");
+  public message: string = "Ingrese una letra";
 
   public readKey(event: KeyboardEvent, input: HTMLInputElement){
     const charInput: string = event.key;
     const isLetter: boolean = /^[a-zA-ZñÑ]$/.test(charInput);
 
-    if (!isLetter)
-      this.message.set("'" + charInput + "' no es una letra");
+    if (!isLetter) {
+      this.message = "'" + charInput + "' no es una letra";
+      this.gameService.score.update(curr => curr - 10);
+    }
     else {
-      if (this.gameService.lettersInput().includes(charInput))
-        this.message.set("Ya probaste '" + charInput + "'");
+      if (this.gameService.lettersInput().includes(charInput)) {
+        this.message = "Ya probaste '" + charInput + "'";
+        this.gameService.score.update(curr => curr - 20);
+      }
       else {
-        if (this.gameService.word().split('').includes(charInput))
-          this.message.set("Felicidades '" + charInput + "' es una letra");
+        if (this.gameService.word().split('').includes(charInput)) {
+          this.message = "Felicidades '" + charInput + "' es una letra";
+          this.gameService.score.update(curr => curr + 100);
+        }
         else {
-          this.message.set("'" + charInput + "' no esta en la palabra");
+          this.message = "'" + charInput + "' no esta en la palabra";
           this.gameService.addAtempt();  
+          this.gameService.score.update(curr => curr - 50);
         }
       }
       this.gameService.lettersInput.update(curr => [...curr, charInput])

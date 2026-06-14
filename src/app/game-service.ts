@@ -48,8 +48,6 @@ export class GameService {
     
     public getCategories(): Category[] { return this.categories; }
     public getGamesMatches(): GameMatch[] { return this.gamesMatches; }
-    public getCategory(): Category { return this.category(); }
-    public getWord(): string { return this.word(); }
     public addAtempt(): void { this.attempt.update(curr => curr + 1); }
 
     public saveGame() {
@@ -61,7 +59,7 @@ export class GameService {
             wordEncrypt: this.wordEncrypt(),
             image: this.dibujoUrl(),
             time: 1.54,
-            score: 1000,
+            score: this.score(),
             won: this.isFill(),
         };
         this.gamesMatches.push(newMatch);
@@ -73,4 +71,5 @@ export class GameService {
         this.lettersInput.set([])
     }
 
+    public score = signal<number>(1000);
 }
